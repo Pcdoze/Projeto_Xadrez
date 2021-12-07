@@ -26,6 +26,8 @@ char xadrez [8][8]= {
      { 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
      { 't', 'c', 'b', 'q', 'r', 'b', 'c', 't'}
 };
+char p1 [6] = { 'T', 'C', 'B', 'Q', 'R', 'P'};
+char p2 [6] = { 't', 'c', 'b', 'q', 'r', 'p'};
 
 int pintartabuleiro() {
     system("cls");
@@ -100,7 +102,7 @@ int pecasatacadas(){
                         xadrez[x-1][y+1] = 'x';
                     }
                 }
-            }/*
+            }
             else if(peca == 'C' || peca == 'c'){
                 if(x >= 2 && y >= 1){
                     if(xadrez[x-2][y-1] == 'X'){
@@ -192,13 +194,13 @@ int pecasatacadas(){
                 }
             }
             else if(peca == 'B' || peca == 'b'){
-                int barreira = 0;
+                int barreira[4] = {0, 0, 0, 0};
 
                 for(int i = 1; i <= 8; i++){
                     if(x+i >= 8 || y+i >= 8){
-                        barreira = 1;
+                        barreira[0] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0]){
                         if(xadrez[x+i][y+i] == ' '){
                             xadrez[x+i][y+i] = peca=='B' ? 'X':'x';
                         }
@@ -206,19 +208,21 @@ int pecasatacadas(){
                             xadrez[x+i][y+i] = peca=='B' ? 'X':'W';
                         }
                         else if(xadrez[x+i][y+i] == 'x'){
-                            xadrez[x+i][y+i] = peca=='B' ? 'W':'X';
+                            xadrez[x+i][y+i] = peca=='B' ? 'W':'x';
+                        }
+                        else if(xadrez[x+i][y+i] == 'W'){
+                            xadrez[x+i][y+i] = 'W';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0 || y+i >= 8){
-                        barreira = 1;
+                        barreira[1] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1]){
                         if(xadrez[x-i][y+i] == ' '){
                             xadrez[x-i][y+i] = peca=='B' ? 'X':'x';
                         }
@@ -226,19 +230,21 @@ int pecasatacadas(){
                             xadrez[x-i][y+i] = peca=='B' ? 'X':'W';
                         }
                         else if(xadrez[x-i][y+i] == 'x'){
-                            xadrez[x-i][y+i] = peca=='B' ? 'W':'X';
+                            xadrez[x-i][y+i] = peca=='B' ? 'W':'x';
+                        }
+                        else if(xadrez[x-i][y+i] == 'W'){
+                            xadrez[x-i][y+i] = 'W';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0 || y+i < 0){
-                        barreira = 1;
+                        barreira[2] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[2]){
                         if(xadrez[x-i][y-i] == ' '){
                             xadrez[x-i][y-i] = peca=='B' ? 'X':'x';
                         }
@@ -246,19 +252,21 @@ int pecasatacadas(){
                             xadrez[x-i][y-i] = peca=='B' ? 'X':'W';
                         }
                         else if(xadrez[x-i][y-i] == 'x'){
-                            xadrez[x-i][y-i] = peca=='B' ? 'W':'X';
+                            xadrez[x-i][y-i] = peca=='B' ? 'W':'x';
+                        }
+                        else if(xadrez[x-i][y-i] == 'W'){
+                            xadrez[x-i][y-i] = 'W';
                         }
                         else{
-                            barreira = 1;
+                            barreira[2] = 1;
                         }
                     }
-                    barreira = 0;
 
                     
                     if(x+i >= 8 || y+i < 0){
-                        barreira = 1;
+                        barreira[3] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[3]){
                         if(xadrez[x+i][y-i] == ' '){
                             xadrez[x+i][y-i] = peca=='B' ? 'X':'x';
                         }
@@ -266,24 +274,26 @@ int pecasatacadas(){
                             xadrez[x+i][y-i] = peca=='B' ? 'X':'W';
                         }
                         else if(xadrez[x+i][y-i] == 'x'){
-                            xadrez[x+i][y-i] = peca=='B' ? 'W':'X';
+                            xadrez[x+i][y-i] = peca=='B' ? 'W':'x';
+                        }
+                        else if(xadrez[x+i][y-i] == 'W'){
+                            xadrez[x+i][y-i] = 'W';
                         }
                         else{
-                            barreira = 1;
+                            barreira[3] = 1;
                         }
                     }
-                    barreira = 0;
                 }
             }
             else if(peca == 'T' || peca == 't'){
 
-                int barreira = 0;
+                int barreira[4] = {0, 0, 0, 0};
 
                 for(int i = 1; i <= 8; i++){
                     if(x+i >= 8){
-                        barreira = 1;
+                        barreira[0] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0]){
                         if(xadrez[x+i][y] == ' '){
                             xadrez[x+i][y] = peca=='T' ? 'X':'x';
                         }
@@ -294,16 +304,15 @@ int pecasatacadas(){
                             xadrez[x+i][y] = peca=='T' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(y+i >= 8){
-                        barreira = 1;
+                        barreira[1] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1]){
                         if(xadrez[x][y+i] == ' '){
                             xadrez[x][y+i] = peca=='T' ? 'X':'x';
                         }
@@ -314,16 +323,15 @@ int pecasatacadas(){
                             xadrez[x][y+i] = peca=='T' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0){
-                        barreira = 1;
+                        barreira[2] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[2]){
                         if(xadrez[x-i][y] == ' '){
                             xadrez[x-i][y] = peca=='T' ? 'X':'x';
                         }
@@ -334,16 +342,15 @@ int pecasatacadas(){
                             xadrez[x-i][y] = peca=='T' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[2] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(y+i < 0){
-                        barreira = 1;
+                        barreira[3] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[3]){
                         if(xadrez[x][y-i] == ' '){
                             xadrez[x][y-i] = peca=='T' ? 'X':'x';
                         }
@@ -354,21 +361,20 @@ int pecasatacadas(){
                             xadrez[x][y-i] = peca=='T' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[3] = 1;
                         }
                     }
-                    barreira = 0;
                 }
             }
             else if(peca == 'Q' || peca == 'q'){
 
-                int barreira = 0;
+                int barreira[2][4] = {{0, 0, 0, 0}, {0, 0, 0, 0}};
 
                 for(int i = 1; i <= 8; i++){
                     if(x+i >= 8 || y+i >= 8){
-                        barreira = 1;
+                        barreira[0][0] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0][0]){
                         if(xadrez[x+i][y+i] == ' '){
                             xadrez[x+i][y+i] = peca=='Q' ? 'X':'x';
                         }
@@ -379,16 +385,15 @@ int pecasatacadas(){
                             xadrez[x+i][y+i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0][0] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0 || y+i >= 8){
-                        barreira = 1;
+                        barreira[0][1] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0][1]){
                         if(xadrez[x-i][y+i] == ' '){
                             xadrez[x-i][y+i] = peca=='Q' ? 'X':'x';
                         }
@@ -399,16 +404,15 @@ int pecasatacadas(){
                             xadrez[x-i][y+i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0][1] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0 || y+i < 0){
-                        barreira = 1;
+                        barreira[0][2] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0][2]){
                         if(xadrez[x-i][y-i] == ' '){
                             xadrez[x-i][y-i] = peca=='Q' ? 'X':'x';
                         }
@@ -419,16 +423,15 @@ int pecasatacadas(){
                             xadrez[x-i][y-i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0][2] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x+i >= 8 || y+i < 0){
-                        barreira = 1;
+                        barreira[0][3] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[0][3]){
                         if(xadrez[x+i][y-i] == ' '){
                             xadrez[x+i][y-i] = peca=='Q' ? 'X':'x';
                         }
@@ -439,20 +442,17 @@ int pecasatacadas(){
                             xadrez[x+i][y-i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[0][3] = 1;
                         }
                     }
-                    barreira = 0;
                 }
 
 
-                barreira = 0;
-
                 for(int i = 1; i <= 8; i++){
                     if(x+i >= 8){
-                        barreira = 1;
+                        barreira[1][0] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1][0]){
                         if(xadrez[x+i][y] == ' '){
                             xadrez[x+i][y] = peca=='Q' ? 'X':'x';
                         }
@@ -463,16 +463,15 @@ int pecasatacadas(){
                             xadrez[x+i][y] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1][0] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(y+i >= 8){
-                        barreira = 1;
+                        barreira[1][1] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1][1]){
                         if(xadrez[x][y+i] == ' '){
                             xadrez[x][y+i] = peca=='Q' ? 'X':'x';
                         }
@@ -483,16 +482,15 @@ int pecasatacadas(){
                             xadrez[x][y+i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1][1] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(x-i < 0){
-                        barreira = 1;
+                        barreira[1][2] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1][2]){
                         if(xadrez[x-i][y] == ' '){
                             xadrez[x-i][y] = peca=='Q' ? 'X':'x';
                         }
@@ -503,16 +501,15 @@ int pecasatacadas(){
                             xadrez[x-i][y] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1][2] = 1;
                         }
                     }
-                    barreira = 0;
 
 
                     if(y+i < 0){
-                        barreira = 1;
+                        barreira[1][3] = 1;
                     }
-                    if(!barreira){
+                    if(!barreira[1][3]){
                         if(xadrez[x][y-i] == ' '){
                             xadrez[x][y-i] = peca=='Q' ? 'X':'x';
                         }
@@ -523,12 +520,11 @@ int pecasatacadas(){
                             xadrez[x][y-i] = peca=='Q' ? 'W':'X';
                         }
                         else{
-                            barreira = 1;
+                            barreira[1][3] = 1;
                         }
                     }
-                    barreira = 0;
                 }
-            }*/
+            }
         }
     }
 }
@@ -553,47 +549,190 @@ int peao(char peca, int linhaorigem, int colunaorigem, int linhadestino, int col
     }
 
     if(peca == 'P'){
-        if(x < 7 && y > 0){
-            if(tempxadrez[x+1][y-1] != ' '){
-                    tempxadrez[x+1][y-1] = 'X';
+        for(int i = 0; i < 6; i++){
+            if(x < 7 && y > 0){
+                if(tempxadrez[x+1][y-1] == p2[i]){
+                        tempxadrez[x+1][y-1] = 'X';
+                }
             }
-        }
-        if(x < 7 && y < 7){
-            if(tempxadrez[x+1][y+1] != ' '){
-                tempxadrez[x+1][y+1] = 'X';
+            if(x < 7 && y < 7){
+                if(tempxadrez[x+1][y+1] == p2[i]){
+                    tempxadrez[x+1][y+1] = 'X';
+                }
             }
         }
 
         if(linhadestino-linhaorigem == 1 && deslhorizontal == 0){
-            if(tempxadrez[linhadestino][colunadestino] == ' ' || tempxadrez[linhadestino][colunadestino] == 'W' ||
-            tempxadrez[linhadestino][colunadestino] == 'X' || tempxadrez[linhadestino][colunadestino] == 'x'){
+            if(tempxadrez[linhadestino][colunadestino] == 'X'){
                 return 1;
+            }
+            else if(linhadestino-linhaorigem == 1 && deslhorizontal == 1){
+                for(int i = 0; i < 6; i++){
+                    if(tempxadrez[linhadestino][colunadestino] == p2[i]){
+                        return 1;
+                    }
+                }
             }
         }
     }
     else if(peca == 'p'){
-        if(x > 0 && y > 0){
-            if(tempxadrez[x+1][y-1] == 'x'){
-                tempxadrez[x+1][y-1] = 'W';
+        for(int i = 0; i < 6; i++){
+            if(x > 0 && y > 0){
+                if(tempxadrez[x+1][y-1] == p1[i]){
+                    tempxadrez[x+1][y-1] = 'x';
+                }
             }
-            else if(tempxadrez[x+1][y-1] == ' '){
-                tempxadrez[x+1][y-1] = 'x';
-            }
-        }
-        if(x > 0 && y < 7){
-            if(tempxadrez[x-1][y+1] == 'x'){
-                tempxadrez[x-1][y+1] = 'W';
-            }
-            else if(tempxadrez[x-1][y+1] == ' '){
-                tempxadrez[x-1][y+1] = 'x';
+            if(x > 0 && y < 7){
+                if(tempxadrez[x-1][y+1] == p1[i]){
+                    tempxadrez[x-1][y+1] = 'x';
+                }
             }
         }
 
         if(linhadestino-linhaorigem == -1 && deslhorizontal == 0){
-            if(tempxadrez[linhadestino][colunadestino] == ' ' || tempxadrez[linhadestino][colunadestino] == 'W' ||
-            tempxadrez[linhadestino][colunadestino] == 'x' || tempxadrez[linhadestino][colunadestino] == 'x'){
+            if(tempxadrez[linhadestino][colunadestino] == 'x'){
                 return 1;
             }
+            else if(linhadestino-linhaorigem == -1 && deslhorizontal == 1){
+                for(int i = 0; i < 6; i++){
+                    if(tempxadrez[linhadestino][colunadestino] == p1[i]){
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+int cavalo(char peca, int linhaorigem, int colunaorigem, int linhadestino, int colunadestino){
+    int x = linhaorigem;
+    int y = colunaorigem;
+    int deslvertical = abs(linhadestino - linhaorigem);
+    int deslhorizontal = abs(colunadestino - colunaorigem);
+    char tempxadrez[8][8];
+
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            tempxadrez[i][j] = xadrez[i][j];
+            char temppeca = tempxadrez[i][j];
+
+
+            for(int i = 0; i < 6; i++){
+                if(peca == 'C'){
+                    if(temppeca == p2[i]){
+                        tempxadrez[i][j] = ' ';
+                    }
+                }
+                else if(peca == 'c'){
+                    if(temppeca == p1[i]){
+                        tempxadrez[i][j] = ' ';
+                    }
+                }
+            }
+            if(temppeca == 'X' || temppeca == 'x' || temppeca == 'W'){
+                tempxadrez[i][j] = ' ';
+            }
+        }
+    }
+
+    if(x >= 2 && y >= 1){
+        if(tempxadrez[x-2][y-1] == 'X'){
+            tempxadrez[x-2][y-1] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x-2][y-1] == 'x'){
+            tempxadrez[x-2][y-1] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x-2][y-1] == ' '){
+            tempxadrez[x-2][y-1] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x >= 2 && y < 7){
+        if(tempxadrez[x-2][y+1] == 'X'){
+            tempxadrez[x-2][y+1] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x-2][y+1] == 'x'){
+            tempxadrez[x-2][y+1] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x-2][y+1] == ' '){
+            tempxadrez[x-2][y+1] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x >= 1 && y < 6){
+        if(tempxadrez[x-1][y+2] == 'X'){
+            tempxadrez[x-1][y+2] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x-1][y+2] == 'x'){
+            tempxadrez[x-1][y+2] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x-1][y+2] == ' '){
+            tempxadrez[x-1][y+2] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x < 7 && y < 6){
+        if(tempxadrez[x+1][y+2] == 'X'){
+            tempxadrez[x+1][y+2] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x+1][y+2] == 'x'){
+            tempxadrez[x+1][y+2] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x+1][y+2] == ' '){
+            tempxadrez[x+1][y+2] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x < 6 && y >= 1){
+        if(tempxadrez[x+2][y+1] == 'X'){
+            tempxadrez[x+2][y+1] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x+2][y+1] == 'x'){
+            tempxadrez[x+2][y+1] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x+2][y+1] == ' '){
+            tempxadrez[x+2][y+1] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x < 6 && y >= 1){
+        if(tempxadrez[x+2][y-1] == 'X'){
+            tempxadrez[x+2][y-1] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x+2][y-1] == 'x'){
+            tempxadrez[x+2][y-1] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x+2][y-1] == ' '){
+            tempxadrez[x+2][y-1] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x < 7 && y >= 2){
+        if(tempxadrez[x+1][y-2] == 'X'){
+            tempxadrez[x+1][y-2] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x+1][y-2] == 'x'){
+            tempxadrez[x+1][y-2] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x+1][y-2] == ' '){
+            tempxadrez[x+1][y-2] = peca == 'C' ? 'X':'x';
+        }
+    }
+    if(x >= 1 && y >= 2){
+        if(tempxadrez[x-1][y-2] == 'X'){
+            tempxadrez[x-1][y-2] = peca == 'C' ? 'X':'W';
+        }
+        else if(tempxadrez[x-1][y-2] == 'x'){
+            tempxadrez[x-1][y-2] = peca == 'C' ? 'W':'x';
+        }
+        else if(tempxadrez[x-1][y-2] == ' '){
+            tempxadrez[x-1][y-2] = peca == 'C' ? 'X':'x';
+        }
+    }
+
+    tempxadrez[linhadestino, colunadestino];
+    if(peca == 'C'){
+        if(tempxadrez[linhadestino][colunadestino] == 'X'){
+            return 1;
+        }
+    }
+    else if(peca == 'c'){
+        if(tempxadrez[linhadestino][colunadestino] == 'x'){
+            return 1;
         }
     }
     return 0;
@@ -652,8 +791,7 @@ if( (linhaorigem >=0 && linhaorigem < 8 && colunaorigem >= 0 && colunaorigem < 8
         if ( (peca == 'B') && (deslvertical ==  deslhorizontal) ) {                   //movimenta��o do bispo
             mover = 1 ;
         }
-        if ( (peca == 'C') && ((deslvertical == 1 && deslhorizontal == 2)              //movimenta��o do cavalo
-            ||(deslvertical == 2 && deslhorizontal == 1)) ) {
+        if ( (peca == 'C') && cavalo('C', linhaorigem, colunaorigem, linhadestino, colunadestino)) {
             mover = 1 ;
         }
         if ( (peca == 'Q') && ((deslvertical ==  deslhorizontal)                   //movimeta��o da rainha
@@ -686,8 +824,7 @@ if( (linhaorigem >=0 && linhaorigem < 8 && colunaorigem >= 0 && colunaorigem < 8
         if ( (peca == 'b') && (deslvertical ==  deslhorizontal) ) {                   //movimenta��o do bispo
             mover = 1 ;
         }
-        if ( (peca == 'c') && ((deslvertical == 1 && deslhorizontal == 2)              //movimenta��o do cavalo
-            ||(deslvertical == 2 && deslhorizontal == 1)) ) {
+        if (peca == 'c' && cavalo('c', linhaorigem, colunaorigem, linhadestino, colunadestino)) {
             mover = 1 ;
         }
         if ( (peca == 'q') && ((deslvertical ==  deslhorizontal)                   //movimeta��o da rainha
