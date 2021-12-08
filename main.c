@@ -6,7 +6,10 @@
 int xeque = 0;
 
 
-char xadrez [8][8]= {
+char xadrez [8][8];
+
+int criartabuleiro(char tabuleiro[8][8]){
+    char modelo[8][8] = {
      { 'T', 'C', 'B', 'Q', 'R', 'B', 'C', 'T'},
      { 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
      { 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -15,7 +18,15 @@ char xadrez [8][8]= {
      { 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
      { 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
      { 't', 'c', 'b', 'q', 'r', 'b', 'c', 't'}
-};
+    };
+
+    for(int x = 0; x < 8; x++){
+        for(int y = 0; y < 8; y++){
+            tabuleiro[x][y] = modelo[x][y];
+        } 
+    }
+}
+
 char p1 [6] = { 'T', 'C', 'B', 'Q', 'R', 'P'};
 char p2 [6] = { 't', 'c', 'b', 'q', 'r', 'p'};
 
@@ -1814,21 +1825,30 @@ int testexequemate(int jogador) {
 }
 
 int main() {
+    criartabuleiro(xadrez);
+
     int jogador = -1;
     int xequemate = 0;
     int escolha;
 
     char P1[15];
     char P2[15];
+    int pontuacaoP1 = 0;
+    int pontuacaoP2 = 0;
 
     int linhaorigem, linhadestino, colunaorigem, colunadestino;
 
-    printf("Escolha uma opção:\n1- 1 Pessoa\n2- 2 Pessoas\n3- Ranking\n");
+    FILE *rank;
+
+    printf("Escolha uma opção:\n1- 1 Pessoa\n2- 2 Pessoas\n3- Ranking\n4- Créditos\n");
     scanf("%d", &escolha);
 
     switch (escolha)
     {
     case 1:{
+        printf("P1, Digite seu nome: ");
+        scanf("%s", P1);
+        
         while(jogador != 0) {
             pintartabuleiro();
 
@@ -1860,9 +1880,11 @@ int main() {
                     if(testexequemate(jogador)){
                         jogador*=-1;
                         if(jogador == -1){
+                            pontuacaoP1++;
                             printf("\nP1 Venceu!");
                         }
                         else if(jogador == 1){
+                            pontuacaoP2++;
                             printf("\nP2 Venceu!");
                         }
                         xequemate = 1;
@@ -1879,22 +1901,33 @@ int main() {
                 if(xeque == 1){
                     if(testexequemate(jogador)){
                         if(jogador == -1){
+                            pontuacaoP1++;
                             printf("\nP1 Venceu!");
                         }
                         else if(jogador == 1){
-                            printf("\nP2 Venceu!");
+                            printf("\nComputador Venceu!");
                         }
                         xequemate = 1;
                     }
                 }
                 if(xequemate == 1){
-                    jogador = 0;
+                    int continuar;
+                    printf("Deseja iniciar um novo jogo?\n1 - Sim\n2 - Nao");
+                    scanf("%d", &continuar);
+                    if(continuar == 1){
+                        criartabuleiro(xadrez);
+                        jogador = 1;
+                    }
+                    else{
+                        rank = fopen("ranking.txt", "a");
+
+                        fprintf(rank, "%s: %d\n", P1, pontuacaoP1);
+                        fclose(rank);
+                        jogador = 0;
+                    }
                 }
                 jogador *= -1;
             }
-
-            
-            
         }
         break;
     }
@@ -1940,24 +1973,54 @@ int main() {
                 if(testexequemate(jogador)){
                     jogador*=-1;
                     if(jogador == -1){
+                        pontuacaoP1++;
                         printf("\nP1 Venceu!\n");
                     }
                     else if(jogador == 1){
+                        pontuacaoP2++;
                         printf("\nP2 Venceu!\n");
                     }
                     xequemate = 1;
                 }
             }
             if(xequemate == 1){
-                jogador = 0;
-            }
+                    int continuar;
+                    printf("Deseja iniciar um novo jogo?\n1 - Sim\n2 - Nao\n");
+                    scanf("%d", &continuar);
+                    if(continuar == 1){
+                        criartabuleiro(xadrez);
+                        jogador = 1;
+                    }
+                    else{
+                        rank = fopen("ranking.txt", "a");
+
+                        fprintf(rank, "%s: %d\n", P1, pontuacaoP1);
+                        fprintf(rank, "%s: %d\n", P2, pontuacaoP2);
+                        fclose(rank);
+                        jogador = 0;
+                    }
+                }
         }
+
         break;
     }
-    case 3:{
-        printf("Não implementado\n");
+    case 3: //Ranking
+        rank = fopen("ranking.txt", "rb");
+        fseek(rank, 0, SEEK_END);
+        long fsize = ftell(rank);
+        fseek(rank, 0, SEEK_SET);
+
+        char *string = malloc(fsize + 1);
+        fread(string, fsize, 1, rank);
+        fclose(rank);
+
+        printf("%s\n", string);
         break;
-    }
+    case 4: //Créditos
+        printf("\n\n\n\n\nEsse jogo foi feito por: \nBianca Schiochet Tiepolo – RGM: 26140489\nCélio Santos da Silva – RGM: 27219551\nKleber Herivelto de Lima Cavalcanti Filho - RGM: 25365037\nMatheus Fialho Barbosa - RGM: 27296377\nMatheus Henrique Meireles de Almeida Silva – RGM: 26565901");
+        break;
+    case 5: //Sair
+        break;
     default:{}
     }
     getch();
