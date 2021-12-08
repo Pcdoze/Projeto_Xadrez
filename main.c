@@ -1915,6 +1915,8 @@ int main() {
                     printf("Deseja iniciar um novo jogo?\n1 - Sim\n2 - Nao");
                     scanf("%d", &continuar);
                     if(continuar == 1){
+                        xeque = 0;
+                        xequemate = 0;
                         criartabuleiro(xadrez);
                         jogador = 1;
                     }
@@ -1988,6 +1990,8 @@ int main() {
                     printf("Deseja iniciar um novo jogo?\n1 - Sim\n2 - Nao\n");
                     scanf("%d", &continuar);
                     if(continuar == 1){
+                        xeque = 0;
+                        xequemate = 0;
                         criartabuleiro(xadrez);
                         jogador = 1;
                     }
