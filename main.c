@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <curses.h>
 
 
 int xeque = 0;
@@ -32,7 +31,6 @@ char p2 [6] = { 't', 'c', 'b', 'q', 'r', 'p'};
 
 int pintartabuleiro() {
     system("cls");
-    system("clear");
 
     int linha, coluna, r;
     for (linha=0; linha < 8 ; linha++){
@@ -1084,7 +1082,7 @@ int bispo(char peca, int linhaorigem, int colunaorigem, int linhadestino, int co
         }
 
 
-        if(x-i < 0 || y+i < 0){
+        if(x-i < 0 || y-i < 0){
             barreira[2] = 1;
         }
         if(!barreira[2]){
@@ -1105,7 +1103,7 @@ int bispo(char peca, int linhaorigem, int colunaorigem, int linhadestino, int co
         }
 
         
-        if(x+i >= 8 || y+i < 0){
+        if(x+i >= 8 || y-i < 0){
             barreira[3] = 1;
         }
         if(!barreira[3]){
@@ -1136,6 +1134,7 @@ int bispo(char peca, int linhaorigem, int colunaorigem, int linhadestino, int co
             return 1;
         }
     }
+    return 0;
 }
 int torre(char peca, int linhaorigem, int colunaorigem, int linhadestino, int colunadestino){
     int x = linhaorigem;
@@ -1256,6 +1255,7 @@ int torre(char peca, int linhaorigem, int colunaorigem, int linhadestino, int co
             }
         }
     }
+    return 0;
 }
 int rainha(char peca, int linhaorigem, int colunaorigem, int linhadestino, int colunadestino){
     int x = linhaorigem;
@@ -1329,7 +1329,7 @@ int rainha(char peca, int linhaorigem, int colunaorigem, int linhadestino, int c
             }
 
 
-            if(x-i < 0 || y+i < 0){
+            if(x-i < 0 || y-i < 0){
                 barreira[0][2] = 1;
             }
             if(!barreira[0][2]){
@@ -1348,7 +1348,7 @@ int rainha(char peca, int linhaorigem, int colunaorigem, int linhadestino, int c
             }
 
 
-            if(x+i >= 8 || y+i < 0){
+            if(x+i >= 8 || y-i < 0){
                 barreira[0][3] = 1;
             }
             if(!barreira[0][3]){
@@ -1603,7 +1603,7 @@ if( (linhaorigem >=0 && linhaorigem < 8 && colunaorigem >= 0 && colunaorigem < 8
 
     if(jogador == -1){
         if (peca == 'T') {
-            if(bispo('T', linhaorigem, colunaorigem, linhadestino, colunadestino)){
+            if(torre('T', linhaorigem, colunaorigem, linhadestino, colunadestino)){
                 mover = 1 ;
             }
         }
@@ -1644,7 +1644,7 @@ if( (linhaorigem >=0 && linhaorigem < 8 && colunaorigem >= 0 && colunaorigem < 8
     }
     else if(jogador == 1){
         if (peca == 't') {
-            if(bispo('t', linhaorigem, colunaorigem, linhadestino, colunadestino)){
+            if(torre('t', linhaorigem, colunaorigem, linhadestino, colunadestino)){
                 mover = 1 ;
             }
         }
@@ -1692,16 +1692,16 @@ int testemoverpeca(char peca, int linhaorigem, int colunaorigem, int linhadestin
     if(peca == 'p'){
         return peao('p', linhaorigem, colunaorigem, linhadestino, colunadestino);
     }
-    else if('c'){
+    else if(peca == 'c'){
         return cavalo('c', linhaorigem, colunaorigem, linhadestino, colunadestino);
     }
-    else if('t'){
+    else if(peca == 't'){
         return torre('t', linhaorigem, colunaorigem, linhadestino, colunadestino);
     }
-    else if('b'){
+    else if(peca == 'b'){
         return bispo('b', linhaorigem, colunaorigem, linhadestino, colunadestino);
     }
-    else if('q'){
+    else if(peca == 'q'){
         return rainha('q', linhaorigem, colunaorigem, linhadestino, colunadestino);
     }
     return 0;
@@ -1827,6 +1827,7 @@ int testexequemate(int jogador) {
 int main() {
     criartabuleiro(xadrez);
 
+    int movimentoinvalido;
     int jogador = -1;
     int xequemate = 0;
     int escolha;
@@ -1852,6 +1853,10 @@ int main() {
         while(jogador != 0) {
             pintartabuleiro();
 
+            if(movimentoinvalido == 1){
+                printf("coordenadas invalidas\n");
+                movimentoinvalido = 0;
+            }
             if(xeque == 1){
                 printf("Seu rei está sobre ataque, mova-o\n");
             }
@@ -1860,20 +1865,18 @@ int main() {
                 printf("P1, 1nforme a linha e coluna de origem: ");
                 scanf("%d %d",&linhaorigem, &colunaorigem);
 
-                printf("\nPeca: %c, informe a linha e coluna de destino: ", xadrez[linhaorigem][colunaorigem]);
+                printf("\nPeca: %c, informe a linha e coluna de destino: ", xadrez[linhaorigem-1][colunaorigem-1]);
                 scanf("%d %d",&linhadestino, &colunadestino);
 
-                if (testexeque(jogador, linhaorigem, colunaorigem, linhadestino, colunadestino)) {
-                    printf("\ncoordenadas invalidas");
-                    getch();
+                if (testexeque(jogador, linhaorigem-1, colunaorigem-1, linhadestino-1, colunadestino-1)) {
+                    movimentoinvalido = 1;
                 }
-                else if(moverpeca(jogador, linhaorigem, colunaorigem, linhadestino, colunadestino) == 1){
+                else if(moverpeca(jogador, linhaorigem-1, colunaorigem-1, linhadestino-1, colunadestino-1) == 1){
                     pecasatacadas();
                     jogador *= -1;
                 }
                 else{
-                    printf("\ncoordenadas invalidas\n");
-                    getch();
+                    movimentoinvalido = 1;
                 }
 
                 if(xeque == 1){
@@ -1942,6 +1945,10 @@ int main() {
         while(jogador != 0) {
             pintartabuleiro();
 
+            if(movimentoinvalido == 1){
+                printf("coordenadas invalidas\n");
+                movimentoinvalido = 0;
+            }
             if(xeque == 1){
                 printf("Seu rei está sobre ataque, mova-o\n");
             }
@@ -1954,21 +1961,19 @@ int main() {
             }
             scanf("%d %d",&linhaorigem, &colunaorigem);
 
-            printf("\nPeca: %c, informe a linha e coluna de destino: ", xadrez[linhaorigem][colunaorigem]);
+            printf("\nPeca: %c, informe a linha e coluna de destino: ", xadrez[linhaorigem-1][colunaorigem-1]);
             scanf("%d %d",&linhadestino, &colunadestino);
 
             
-            if (testexeque(jogador, linhaorigem, colunaorigem, linhadestino, colunadestino)) {
-                printf("\ncoordenadas invalidas");
-                getch();
+            if (testexeque(jogador, linhaorigem-1, colunaorigem-1, linhadestino-1, colunadestino-1)) {
+                movimentoinvalido = 1;
             }
-            else if(moverpeca(jogador, linhaorigem, colunaorigem, linhadestino, colunadestino) == 1){
+            else if(moverpeca(jogador, linhaorigem-1, colunaorigem-1, linhadestino-1, colunadestino-1) == 1){
                 pecasatacadas();
                 jogador *= -1;
             }
             else{
-                printf("\ncoordenadas invalidas\n");
-                getch();
+                movimentoinvalido = 1;
             }
 
             if(xeque == 1){
@@ -1993,7 +1998,7 @@ int main() {
                         xeque = 0;
                         xequemate = 0;
                         criartabuleiro(xadrez);
-                        jogador = 1;
+                        jogador = -1;
                     }
                     else{
                         rank = fopen("ranking.txt", "a");
@@ -2010,15 +2015,18 @@ int main() {
     }
     case 3: //Ranking
         rank = fopen("ranking.txt", "rb");
-        fseek(rank, 0, SEEK_END);
-        long fsize = ftell(rank);
-        fseek(rank, 0, SEEK_SET);
-
-        char *string = malloc(fsize + 1);
-        fread(string, fsize, 1, rank);
+        char c;
+        do
+        {
+            //faz a leitura do caracter no arquivo apontado por pont_arq
+            c = fgetc(rank);
+            
+            //exibe o caracter lido na tela
+            printf("%c" , c);    
+            
+        }while (c != EOF);
         fclose(rank);
-
-        printf("%s\n", string);
+        
         break;
     case 4: //Créditos
         printf("\n\n\n\n\nEsse jogo foi feito por: \nBianca Schiochet Tiepolo – RGM: 26140489\nCélio Santos da Silva – RGM: 27219551\nKleber Herivelto de Lima Cavalcanti Filho - RGM: 25365037\nMatheus Fialho Barbosa - RGM: 27296377\nMatheus Henrique Meireles de Almeida Silva – RGM: 26565901");
@@ -2027,6 +2035,5 @@ int main() {
         break;
     default:{}
     }
-    getch();
     return 0 ;
 }
